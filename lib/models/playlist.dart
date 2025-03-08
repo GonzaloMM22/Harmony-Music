@@ -34,6 +34,7 @@ class Playlist {
   final String thumbnailUrl;
   final String? songCount;
   final bool isCloudPlaylist;
+  List<MediaItem> songs = [];
 
   factory Playlist.fromJson(Map<dynamic, dynamic> json) => Playlist(
       title: json["title"],
@@ -53,10 +54,19 @@ class Playlist {
         ],
         "itemCount": songCount,
         "isPipedPlaylist": isPipedPlaylist,
-        "isCloudPlaylist": isCloudPlaylist
+        "isCloudPlaylist": isCloudPlaylist,
+        "songs": songs.map((e) => e.toJson()).toList(),
       };
 
   set newTitle(String title) {
     this.title = title;
+  }
+  
+  void reorderSongs(int oldIndex, int newIndex) {
+    if (newIndex > oldIndex) {
+      newIndex -= 1;
+    }
+    final MediaItem item = songs.removeAt(oldIndex);
+    songs.insert(newIndex, item);
   }
 }
